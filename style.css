@@ -1,0 +1,122 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(150deg, rgb(20, 20, 20), rgb(36, 36, 36));
+}
+
+h1{
+    margin: 0;
+    color: #00ffc8;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 400%;
+}
+
+header{
+    position: absolute;
+    margin-bottom: 800px;
+}
+
+.search-bar {
+    position: absolute;
+    top: 170px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#searchInput {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    width: 300px;
+    background-color: #1c1c1c;
+    color: #00ffc8;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 255, 200, 0.2);
+}
+
+#searchInput::placeholder {
+    color: #bebebe;
+}
+
+img{
+    height: 350px;
+    width: 250px;
+}
+
+.container{
+    position: relative;
+    width: 250px;
+    height: 350px;
+    margin-top: 12%;
+    /*right: 3%;*/
+    transform-style: preserve-3d;
+    animation: animate 20s linear infinite;
+}
+
+.container:hover{
+    animation-play-state: paused;
+}
+
+@keyframes animate{
+    0%{
+        transform: perspective(1000px) rotateY(0deg);
+    }
+    100%{
+        transform: perspective(1000px) rotateY(360deg);
+    }
+}
+
+.container span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: center;
+    transform-style: preserve-3d;
+    /*transform: rotateY(calc(var(--i) * 45deg)) translateZ(400px);
+    -webkit-box-reflect: below 2px linear-gradient(transparent, transparent, rgba(4, 4, 4, 0.267));*/
+    -webkit-box-reflect: below 2px linear-gradient(transparent, transparent, rgba(4, 4, 4, 0.267));
+}
+
+.container span img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    border: 4px double rgb(230, 230, 230);
+}
+
+img:hover{
+    transform: translateY(-4px);
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
