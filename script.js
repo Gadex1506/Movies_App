@@ -59,8 +59,6 @@ function renderCarousel(movies) {
     const count = movies.length;
     const angle = 360 / count;
 
-    let activeTrailer = null;
-
     movies.forEach((movie, index) => {
         const span = document.createElement('span');
         span.style.setProperty('--i', index + 1);
@@ -77,65 +75,36 @@ function renderCarousel(movies) {
 
         // Evento click para mostrar u ocultar tráiler
         span.addEventListener('click', async () => {
-            if (activeTrailer && activeTrailer !== span) {
-                restorePoster(activeTrailer.span, activeTrailer.movie);
-            }
-        
-            if (span.classList.contains('trailer-active')) {
-                restorePoster(span, movie);
-                activeTrailer = null;
-                return;
-            }
-        
             const trailerUrl = await getTrailer(movie.id);
         
             if (trailerUrl) {
                 const videoId = trailerUrl.split('v=')[1];
                 const iframe = document.createElement('iframe');
-                iframe.width = '250';
-                iframe.height = '350';
-                iframe.allow = 'autoplay; encrypted-media';
-                iframe.frameBorder = '0';
-                iframe.allowFullscreen = true;
-        
-                span.innerHTML = '';
-                span.appendChild(iframe);
                 iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&loop=1&playlist=${videoId}&vq=hd1080`;
-                span.classList.add('trailer-active');
-        
-                activeTrailer = { span, movie };
-        
-                // 👇 Agrega este listener para cerrar el tráiler al salir el mouse
-                span.addEventListener('mouseleave', function onLeave() {
-                    restorePoster(span, movie);
-                    span.removeEventListener('mouseleave', onLeave); // Evita duplicados
-                    activeTrailer = null;
-                });
+                iframe.allow = 'autoplay; encrypted-media';
+                iframe.allowFullscreen = true;
+                
+                const overlay = document.getElementById('videoOverlay');
+                const videoContainer = document.getElementById('videoContainer');
+
+                // Limpia el contenido anterior y muestra el modal
+                videoContainer.innerHTML = '';
+                videoContainer.appendChild(iframe);
+                overlay.classList.remove('hidden');
+
+                document.getElementById('carouselContainer').classList.add('carousel-paused'); // Pausa la animación del carrusel
             }
         });
     });
 
-    function restorePoster(targetSpan, movieData) {
-        const iframe = targetSpan.querySelector('iframe');
-        if (iframe) {
-            iframe.classList.add('fade-out'); // Aplica animación
-    
-            // Esperamos a que termine la animación antes de reemplazar
-            setTimeout(() => {
-                targetSpan.innerHTML = ''; // Limpiar
-    
-                const newImg = document.createElement('img');
-                newImg.src = movieData.poster_path
-                    ? `${IMAGE_BASE}${movieData.poster_path}`
-                    : 'https://via.placeholder.com/250x350?text=No+Image';
-                newImg.alt = movieData.title;
-                newImg.classList.add('fade-in'); // Animación de entrada
-    
-                targetSpan.appendChild(newImg);
-                targetSpan.classList.remove('trailer-active');
-            }, 500); // Tiempo igual a la duración del fade
-        }
-    }
+    // Cierre del modal con la X
+    document.getElementById('closeModal').addEventListener('click', () => {
+        const overlay = document.getElementById('videoOverlay');
+        const videoContainer = document.getElementById('videoContainer');
+        overlay.classList.add('hidden');
+        videoContainer.innerHTML = ''; // Detiene el tráiler
+        document.getElementById('carouselContainer').classList.remove('carousel-paused'); // Reanuda la animación del carrusel
+    });
 }
 
 fetchPopularMovies();

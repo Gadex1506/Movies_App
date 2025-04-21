@@ -65,7 +65,12 @@ img{
     animation: animate 20s linear infinite;
 }
 
-.container:hover{
+.container.carousel-paused {
+    animation-play-state: paused !important;
+    pointer-events: none; /* Evita interacciones mientras está el modal */
+}
+
+.container:hover:not(.carousel-paused) {
     animation-play-state: paused;
 }
 
@@ -119,4 +124,58 @@ img:hover{
     to {
         opacity: 1;
     }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    position: relative;
+    width: 80%;
+    max-width: 960px;
+    background: #111;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #00ffc8;
+}
+
+.modal iframe {
+    width: 100%;
+    height: 540px;
+    border: none;
+    border-radius: 10px;
+}
+
+#closeModal {
+    position: absolute;
+    bottom: -50px;
+    right: 49%;
+    font-size: 2rem;
+    background: #ff5faf99;
+    color: #ffb8dc;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px #ff5faf; /* sombra elegante */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#closeModal:hover {
+    transform: scale(1.4);
+}
+
+.hidden {
+    display: none;
 }
